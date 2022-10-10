@@ -9,6 +9,7 @@ name: Check for changes
 env:
   github_username: "open-telemetry"
   github_repo: "opentelemetry-specification"
+  SEGMENT_DOWNLOAD_TIMEOUT_MIN: "1800"
 
 jobs:
   check:
