@@ -38,5 +38,5 @@ jobs:
       
       # If there was not a cache hit (meaning the response changed), print it.
       - name: Notify if page has changed
-        if: steps.cache.outputs.cache-hit != 'true' && steps.parse_data.outputs.draft = 'False' && steps.parse_data.outputs.prerelease = 'False' && steps.parse_data.outputs.target_commitish = 'main'
+        if: steps.cache.outputs.cache-hit != 'true' && steps.parse_data.outputs.draft == 'False' && steps.parse_data.outputs.prerelease == 'False' && steps.parse_data.outputs.target_commitish == 'main'
         run: echo "Page was updated at ${{ steps.parse_data.outputs.published_at}} and version is now ${{steps.parse_data.outputs.name}}"
