@@ -18,14 +18,20 @@ jobs:
 
       # Use cURL to fetch the given URL, saving the response to `data.json`
       - name: Fetch data
+        uses: actions/checkout@v2
         run: curl "https://api.github.com/repos/{github_username}/{github_repo}/releases/latest" -o data.json
+
+      - name: saves data.json
+        uses: actions/upload-artifact@v3
+        with:
+          name: saved-data
+          path: .data/data.json
 
       # Use `jq` to pull one or more fields from the JSON to include in the issue
       - name: Parse data
         id: parse_data
         run: |
-          echo "${{ data.json }}"
-          echo "::set-output name=name::"$(jq -r '.name' data.json)
+          echo "::set-output name=name::"$(jq -r '.name' .data/data.json)
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
       #    echo "::set-output name=draft::$(jq -r '.draft' data.json)"
@@ -37,7 +43,7 @@ jobs:
         id: cache
         uses: actions/cache@v2
         with:
-          path: data.json
+          path: .data/data.json
           key: ${{ hashFiles('data.json') }}
       
       # If there was not a cache hit (meaning the response changed), print it, and create an issue.
