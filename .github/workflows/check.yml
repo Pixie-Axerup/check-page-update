@@ -24,11 +24,11 @@ jobs:
       - name: Parse data
         id: parse_data
         run: |
-          echo ::set-output name=name:: $(jq -r '.name' data.json)
-          echo ::set-output name=published_at:: $(jq -r '.published_at' data.json)
-          echo ::set-output name=draft:: $(jq -r '.draft' data.json)
-          echo ::set-output name=prerelease:: $(jq -r '.prerelease' data.json)
-          echo ::set-output name=target_commitish:: $(jq -r '.target_commitish' data.json)
+          echo ::set-output name=name::$(jq -r '.name' data.json)
+          echo ::set-output name=published_at::$(jq -r '.published_at' data.json)
+          echo ::set-output name=draft::$(jq -r '.draft' data.json)
+          echo ::set-output name=prerelease::$(jq -r '.prerelease' data.json)
+          echo ::set-output name=target_commitish::$(jq -r '.target_commitish' data.json)
 
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
