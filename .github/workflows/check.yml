@@ -31,7 +31,6 @@ jobs:
         id: parse_data
         run: |
           echo "::set-output name=alldata::"$(jq '.' data.json)
-          echo '${{ steps.parse_data.outputs.alldata }}' | jq '{tag_name: .tag_name}'
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
       #    echo "::set-output name=draft::$(jq -r '.draft' data.json)"
