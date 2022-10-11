@@ -30,7 +30,7 @@ jobs:
       - name: Parse version
         id: parse_version
         run: |
-          echo "::set-output name=version::$(jq -r .'name' data.json)"
+          echo "::set-output name=version::$(jq -r .name data.json)"
           echo "${{ steps.parse_version.outputs.version }}"
 
 
