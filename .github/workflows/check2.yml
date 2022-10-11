@@ -23,7 +23,10 @@ jobs:
       # Use cURL to fetch the given URL, saving the response to `data.json`
       - name: Fetch data
         id: fetch_data
-        run: curl "https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest" -o data.json
+        run: |
+          curl --request GET \
+          --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
+          --url https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest" -o data.json
 
 
       # Use `jq` to pull one or more fields from the JSON to include in the issue
@@ -48,8 +51,8 @@ jobs:
         id: cache
         uses: actions/cache@v2
         with:
-          path: data.json
-          key: ${{ hashFiles('data.json') }}
+          path: version
+          key: ${{ hashFiles('version') }}
 
       # If there was not a cache hit (meaning the response changed), print it, and create an issue.
       - name: Get today's date
