@@ -23,14 +23,14 @@ jobs:
       # Use cURL to fetch the given URL, saving the response to `data.json`
       - name: Fetch data
         id: fetch_data
-        run: curl --location --request GET 'https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest' -o data.json
+        run: curl "https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest" -o data.json
 
 
       # Use `jq` to pull one or more fields from the JSON to include in the issue
       - name: Parse version
         id: parse_version
         run: |
-          echo "::set-output name=version::"$(cat data.json | jq -r '.name')
+          echo "::set-output name=version::$(curl -s https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest | jq '.name' | sed 's/\"//g')"
           echo "${{ steps.parse_version.outputs.version }}"
 
 
