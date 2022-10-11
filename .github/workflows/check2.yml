@@ -25,7 +25,7 @@ jobs:
       - name: Parse version
         id: parse_version
         run: |
-          echo "::set-output name=version::$(curl -s https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest | jq '.' | sed 's/\"//g')"
+          echo "::set-output name=version::$(curl -s https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest | jq '.["name"]' | sed 's/\"//g')"
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
       #    echo "::set-output name=draft::$(jq -r '.draft' data.json)"
