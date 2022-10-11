@@ -37,12 +37,12 @@ jobs:
     runs-on: ubuntu-latest
     needs: collect
     steps:
-      - name: Fetch Cache
-        id: cache
-        uses: actions/cache@v2
-        with:
-          path: version
-          key: ${{ hashFiles('version') }}
+      #- name: Fetch Cache
+      #  id: cache
+      #  uses: actions/cache@v2
+      #  with:
+      #    path: ${{ steps.parse_version.outputs.version }}
+      #    key: ${{ hashFiles('version') }}
 
       # If there was not a cache hit (meaning the response changed), print it, and create an issue.
       - name: Get today's date
