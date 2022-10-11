@@ -45,7 +45,6 @@ jobs:
 
       - name: Notify if page has changed and create issue
         #if: steps.cache.outputs.cache-hit != 'true' && steps.parse_data.outputs.draft == 'False' && steps.parse_data.outputs.prerelease == 'False' && steps.parse_data.outputs.target_commitish == 'main'
-        run: echo "Page was updated at ${{ steps.parse_data.outputs.published_at}} and version is now ${{steps.parse_data.outputs.name}}"
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ secrets.github_token }}
