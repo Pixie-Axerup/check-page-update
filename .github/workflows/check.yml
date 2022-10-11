@@ -60,6 +60,6 @@ jobs:
           body: |
               ## OpenTelemetry Specifications was updated
 
-                  New version is ${{ steps.parse_data.outputs.name }}
+                  New version is ${{ steps.parse_data.outputs.alldata }}
                   Check out https://github.com/open-telemetry/opentelemetry-specification/blob/main/CHANGELOG.md
 
