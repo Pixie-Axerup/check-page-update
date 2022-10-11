@@ -24,7 +24,7 @@ jobs:
       - name: Parse data
         id: parse_data
         run: |
-          version=$(data.json | jq '.name')
+          version=$(data.json | jq '. | {name}')
           echo "::set-output name=version::$version"
           echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
           echo "::set-output name=draft::$(jq -r '.draft' data.json)"
