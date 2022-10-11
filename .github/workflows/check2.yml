@@ -14,7 +14,6 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     outputs:
-      saved: ${{ steps.fetch_data.outputs.saved }}
       version: ${{ steps.parse_version.outputs.version }}
       #published_at: ${{ steps.parse_data.outputs.published_at }}
       #draft: ${{ steps.parse_data.outputs.draft }}
@@ -24,16 +23,13 @@ jobs:
       # Use cURL to fetch the given URL, saving the response to `data.json`
       - name: Fetch data
         id: fetch_data
-        run: |
-          response = $(curl --write-out '%{json}' "https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest")
-          echo "${{ response }}
+        run: curl --write-out '%{json}' "https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest" -o data.json
 
       # Use `jq` to pull one or more fields from the JSON to include in the issue
       - name: Parse version
         id: parse_version
         run: |
-          echo "::set-output name=version::$(jq -r .name saved)"
-          echo "${{ ./saved }}"
+          echo "::set-output name=version::$(cat data.json | jq -r .name)"
 
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
