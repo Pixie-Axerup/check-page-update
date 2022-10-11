@@ -26,7 +26,7 @@ jobs:
         run: |
           curl --request GET \
           --header 'authorization: Bearer ${{ secrets.GITHUB_TOKEN }}' \
-          --url https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest" -o data.json
+          --url https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest -o data.json
 
 
       # Use `jq` to pull one or more fields from the JSON to include in the issue
