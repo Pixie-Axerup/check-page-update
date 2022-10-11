@@ -18,14 +18,15 @@ jobs:
 
       # Use cURL to fetch the given URL, saving the response to `data.json`
       - name: Fetch data
-        run: curl "https://api.github.com/repos/{github_username}/{github_repo}/releases/latest" -o data.json
+        run: |
+          curl "https://api.github.com/repos/{github_username}/{github_repo}/releases/latest" -o data.json
+          echo ${{ data.json }}
 
       # Use `jq` to pull one or more fields from the JSON to include in the issue
       - name: Parse data
         id: parse_data
         run: |
-          version=$(data.json | jq -r '.' | {name})
-          echo "::set-output name=version::"$version
+          echo "::set-output name=name::"$(jq -r '.name' data.json)
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
       #    echo "::set-output name=draft::$(jq -r '.draft' data.json)"
