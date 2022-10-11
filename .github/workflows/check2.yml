@@ -29,7 +29,9 @@ jobs:
       # Use `jq` to pull one or more fields from the JSON to include in the issue
       - name: Parse version
         id: parse_version
-        run: echo "::set-output name=version::$(jq -r .'name' data.json)"
+        run: |
+          echo "::set-output name=version::$(jq -r .'name' data.json)"
+          echo "${{ steps.parse_version.outputs.version }}"
 
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
