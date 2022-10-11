@@ -25,7 +25,7 @@ jobs:
       # Use cURL to fetch the given URL, saving the response to `data.json`
       - name: Fetch data
         id: fetch_data
-        run: curl "https://api.github.com/repos/{github_username}/{github_repo}/releases/latest" -o "./data.json"
+        run: curl "https://api.github.com/repos/{github_username}/{github_repo}/releases/latest" > data.json
 
       # Use `jq` to pull one or more fields from the JSON to include in the issue
       - name: Parse version
@@ -48,7 +48,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: data.json
-          key: ${{ hashFiles('json_data') }}
+          key: ${{ hashFiles('data.json') }}
 
       # If there was not a cache hit (meaning the response changed), print it, and create an issue.
       - name: Get today's date
