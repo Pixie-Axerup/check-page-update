@@ -15,6 +15,7 @@ jobs:
   collect:
     runs-on: ubuntu-latest
     outputs:
+      json_data: ${{ steps.fetch_data.outputs.data.json }}
       version: ${{ steps.parse_version.outputs.version }}
       #published_at: ${{ steps.parse_data.outputs.published_at }}
       #draft: ${{ steps.parse_data.outputs.draft }}
@@ -47,7 +48,7 @@ jobs:
         uses: actions/cache@v2
         with:
           path: data.json
-          key: ${{ hashFiles('data.json') }}
+          key: ${{ hashFiles('json_data') }}
 
       # If there was not a cache hit (meaning the response changed), print it, and create an issue.
       - name: Get today's date
