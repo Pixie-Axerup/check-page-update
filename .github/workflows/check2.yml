@@ -31,7 +31,7 @@ jobs:
         id: parse_version
         run: |
           echo "::set-output name=version::"$(cat data.json | jq -r '.name')
-          echo "${{ steps.parse_version.outputs.version }}
+          echo "${{ steps.parse_version.outputs.version }}"
 
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
