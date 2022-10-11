@@ -1,7 +1,6 @@
 on:
   [push]
   #schedule:
-  # Run every hour, on the hour. This can be customized to checking as frequently as every 5 minutes.
 # - cron:  '1 8 * * *'
 
 name: Check for changes
@@ -30,7 +29,7 @@ jobs:
       # Use `jq` to pull one or more fields from the JSON to include in the issue
       - name: Parse version
         id: parse_version
-        run: echo "::set-output name=version::"$(jq -r '.name' data.json)
+        run: echo "::set-output name=version::$(jq -r .'name' data.json)"
 
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
