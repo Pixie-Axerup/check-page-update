@@ -41,23 +41,17 @@ jobs:
           key: ${{ hashFiles('data.json') }}
       
       # If there was not a cache hit (meaning the response changed), print it, and create an issue.
-      - name: Get today's date
-        id: date
-        run: |
-          echo "::set-output name=today::$(date "+%Y/%m/%d")"
 
       - name: Notify if page has changed and create issue
         #if: steps.cache.outputs.cache-hit != 'true' && steps.parse_data.outputs.draft == 'False' && steps.parse_data.outputs.prerelease == 'False' && steps.parse_data.outputs.target_commitish == 'main'
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ github.token }}
-          title: OpenTelemetry Specifications updated on ${{ steps.date.outputs.today }}
+          title: OpenTelemetry Specifications updated on ${{ steps.parse_data.outputs.published_at }}
           body: |
               ## OpenTelemetry Specifications was updated
 
-                  New version is ${{ steps.parse_data.outputs.version }}
-                  Published at ${{ steps.parse_data.outputs.published_at }}
-                  (draft = ${{ steps.parse_data.outputs.draft }} and prerelease = ${{ steps.parse_data.outputs.prerelease }}
+                  ${{ steps.parse_data.outputs.version }} was published at ${{ steps.parse_data.outputs.published_at }}
 
                   Check out https://github.com/open-telemetry/opentelemetry-specification/blob/main/CHANGELOG.md
 
