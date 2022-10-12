@@ -7,8 +7,6 @@ on:
 name: Check for changes
 
 env:
-  github_username: "open-telemetry"
-  github_repo: "opentelemetry-specification"
   SEGMENT_DOWNLOAD_TIMEOUT_MIN: "1800"
 
 jobs:
@@ -21,14 +19,14 @@ jobs:
         id: fetch_data
         run: |
           curl "https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest" -o data.json
-          echo "::set-output name=test::"$(cat data.json | jq .name)
+
         shell: bash
 
       # Use `jq` to pull one or more fields from the JSON to include in the issue
       - name: Parse data
         id: parse_data
         run: |
-          echo "::set-output name=alldata::"$(jq -c '.' data.json)
+          echo "::set-output name=version::"$(cat data.json | jq .name)
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
       #    echo "::set-output name=draft::$(jq -r '.draft' data.json)"
@@ -58,7 +56,6 @@ jobs:
           body: |
               ## OpenTelemetry Specifications was updated
 
-                  test: ${{ steps.fetch_data.outputs.test }}
-                  New version is ${{ steps.parse_data.outputs.alldata }}
+                  New version is ${{ steps.parse_data.outputs.version }}
                   Check out https://github.com/open-telemetry/opentelemetry-specification/blob/main/CHANGELOG.md
 
