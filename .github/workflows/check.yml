@@ -30,7 +30,7 @@ jobs:
       - name: Parse data
         id: parse_data
         run: |
-          echo "::set-output name=alldata::"$(jq '.["name"]' data.json)
+          echo "::set-output name=alldata::"$(jq '.' data.json)
 
       #    echo "::set-output name=published_at::$(jq -r '.published_at' data.json)"
       #    echo "::set-output name=draft::$(jq -r '.draft' data.json)"
