@@ -20,7 +20,7 @@ jobs:
       - name: Fetch data
         run: |
           curl "https://api.github.com/repos/{github_username}/{github_repo}/releases/latest" -o data.json
-          cat data.json | jq .name
+          echo "cat data.json | jq .name"
         shell: bash
 
       # Use `jq` to pull one or more fields from the JSON to include in the issue
