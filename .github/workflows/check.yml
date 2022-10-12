@@ -14,15 +14,13 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Use cURL to fetch the given URL, saving the response to `data.json`
+      # Use cURL to fetch the given URL, saving the response to `data.json`.
       - name: Fetch data
         id: fetch_data
         run: |
           curl "https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest" -o data.json
 
-        shell: bash
-
-      # Use `jq` to pull one or more fields from the JSON to include in the issue
+      # Use `jq` to pull one or more fields from the JSON to filter on, and to include in the issue.
       - name: Parse data
         id: parse_data
         run: |
@@ -40,10 +38,10 @@ jobs:
           path: data.json
           key: ${{ hashFiles('data.json') }}
       
-      # If there was not a cache hit (meaning the response changed), print it, and create an issue.
+      # If there was not a cache hit (meaning the response changed) - create an issue.
 
       - name: Notify if page has changed and create issue
-        #if: steps.cache.outputs.cache-hit != 'true' && steps.parse_data.outputs.draft == 'False' && steps.parse_data.outputs.prerelease == 'False' && steps.parse_data.outputs.target_commitish == 'main'
+        #if: steps.cache.outputs.cache-hit != 'true' && steps.parse_data.outputs.draft == 'false' && steps.parse_data.outputs.prerelease == 'false' && steps.parse_data.outputs.target_commitish == 'main'
         uses: actions-ecosystem/action-create-issue@v1
         with:
           github_token: ${{ github.token }}
