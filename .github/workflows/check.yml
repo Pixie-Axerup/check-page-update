@@ -1,14 +1,11 @@
 on:
-  [push]
-  #schedule:
-    # Run every hour, on the hour. This can be customized to checking as frequently as every 5 minutes.
-   # - cron:  '1 8 * * *'
+  schedule:
+    # Run once per day, at 08:01.
+    - cron:  '1 8 * * *'
 
 name: Check for changes
 
 env:
-  github_username: "open-telemetry"
-  github_repo: "opentelemetry-specification"
   SEGMENT_DOWNLOAD_TIMEOUT_MIN: "1800"
 
 jobs:
@@ -16,18 +13,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
 
-      # Use cURL to fetch the given URL, saving the response to `data.json`
+      # Use cURL to fetch the given URL, saving the response to `data.json`.
       - name: Fetch data
-        run: curl "https://api.github.com/repos/{github_username}/{github_repo}/releases/latest" -o data.json
+        id: fetch_data
+        run: |
+          curl "https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest" -o data.json
 
-      # Optionally, use `jq` to pull one or more fields from the JSON to include in the SMS message
+      # Use `jq` to pull one or more fields from the JSON to filter on, and to include in the issue.
       - name: Parse data
         id: parse_data
-        run: echo '::set-output name=name::'$(jq -r '.name' data.json)
-               echo '::set-output name=published_at::'$(jq -r '.published_at' data.json)
-               echo '::set-output name=draft::'$(jq -r '.draft' data.json)
-               echo '::set-output name=prerelease::'$(jq -r '.prerelease' data.json)
-               echo '::set-output name=target_commitish::'$(jq -r '.target_commitish' data.json)
+        run: |
+          echo "::set-output name=version::"$(cat data.json | jq .name)
+          echo "::set-output name=published_at::"$(cat data.json | jq .published_at)
+          echo "::set-output name=draft::"$(cat data.json | jq .draft)
+          echo "::set-output name=prerelease::"$(cat data.json | jq .prerelease)
+          echo "::set-output name=target_commitish::"$(cat data.json | jq .target_commitish)
 
       # Compare the response to the previous run, using a hash of the response as the cache key
       - name: Fetch Cache
@@ -37,22 +37,18 @@ jobs:
           path: data.json
           key: ${{ hashFiles('data.json') }}
       
-      # If there was not a cache hit (meaning the response changed), print it, and create an issue.
-      - name: Get today's date
-        id: date
-        run: |
-          echo "::set-output name=today::$(date "+%Y/%m/%d")"
+      # If there was not a cache hit (meaning the response changed) - create an issue.
 
       - name: Notify if page has changed and create issue
-        #if: steps.cache.outputs.cache-hit != 'true' && steps.parse_data.outputs.draft == 'False' && steps.parse_data.outputs.prerelease == 'False' && steps.parse_data.outputs.target_commitish == 'main'
-        run: echo "Page was updated at ${{ steps.parse_data.outputs.published_at}} and version is now ${{steps.parse_data.outputs.name}}"
+        if: steps.cache.outputs.cache-hit != 'true' && steps.parse_data.outputs.draft == 'false' && steps.parse_data.outputs.prerelease == 'false' && steps.parse_data.outputs.target_commitish == 'main'
         uses: actions-ecosystem/action-create-issue@v1
         with:
-          github_token: ${{ secrets.github_token }}
-          title: OpenTelemetry Specifications updated on ${{ steps.date.outputs.today }}
+          github_token: ${{ github.token }}
+          title: OpenTelemetry Specifications updated on ${{ steps.parse_data.outputs.published_at }}
           body: |
               ## OpenTelemetry Specifications was updated
 
-                  New version is ${{ steps.parse_data.outputs.name }}
+                  ${{ steps.parse_data.outputs.version }} was published at ${{ steps.parse_data.outputs.published_at }}
+
                   Check out https://github.com/open-telemetry/opentelemetry-specification/blob/main/CHANGELOG.md
 
