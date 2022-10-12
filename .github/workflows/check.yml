@@ -20,7 +20,7 @@ jobs:
       - name: Fetch data
         id: fetch_data
         run: |
-          curl "https://api.github.com/repos/{github_username}/{github_repo}/releases/latest" -o data.json
+          curl "https://api.github.com/repos/open-telemetry/opentelemetry-specification/releases/latest" -o data.json
           echo "::set-output name=test::"$(cat data.json | jq .name)
         shell: bash
 
